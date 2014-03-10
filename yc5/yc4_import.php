@@ -3,10 +3,10 @@ include_once('./_common.php');
 include_once(G5_LIB_PATH.'/connect.lib.php');
 include_once(G5_LIB_PATH.'/outlogin.lib.php');
 
-$g5['title'] = '그누보드4 DB 데이터 이전';
+$g5['title'] = '영카트4 DB 데이터 이전';
 include_once(G5_PATH.'/head.sub.php');
 
-if(get_session('tables_copied') == 'done')
+if(get_session('yc4_tables_copied') == 'done')
     alert('DB 데이터 변환을 이미 실행하였습니다. 중복 실행시 오류가 발생할 수 있습니다.', G5_URL);
 
 if($is_admin != 'super')
@@ -129,20 +129,20 @@ if($is_admin != 'super')
 <!-- 콘텐츠 시작 { -->
 <div id="wrapper">
     <div id="aside">
-        <?php echo outlogin('basic'); // 외부 로그인  ?>
+        <?php // echo outlogin('basic'); // 외부 로그인  ?>
     </div>
     <div id="container">
         <?php if ((!$bo_table || $w == 's' ) && !defined("_INDEX_")) { ?><div id="container_title"><?php echo $g5['title'] ?></div><?php } ?>
 
         <div id="g4_import">
             <p>
-                이 프로그램은 그누보드5 설치 후 바로 실행하셔야만 합니다.<br>
-                만약 그누보드5 사이트를 운영 중에 이 프로그램을 실행하시면 DB 데이터가 망실되거나 데이터의 오류가 발생할 수 있습니다.<br>
+                이 프로그램은 영카트5 설치 후 바로 실행하셔야만 합니다.<br>
+                만약 영카트5 사이트를 운영 중에 이 프로그램을 실행하시면 DB 데이터가 망실되거나 데이터의 오류가 발생할 수 있습니다.<br>
                 또한 중복해서 실행하실 경우에도 DB 데이터의 오류가 발생할 수 있으니 반드시 한번만 실행해 주십시오.
             </p>
-            <p>프로그램을 실행하시려면 그누보드4의 config.php 파일 경로를 입력하신 후 확인을 클릭해 주십시오.</p>
+            <p>프로그램을 실행하시려면 영카트4의 config.php 파일 경로를 입력하신 후 확인을 클릭해 주십시오.</p>
 
-            <form name="fimport" method="post" action="./g4_import_run.php" onsubmit="return fimport_submit(this);">
+            <form name="fimport" method="post" action="./yc4_import_run.php" onsubmit="return fimport_submit(this);">
             <div id="g4_import_frm">
                 <label for="file_path">config.php 파일 경로</label>
                 <input type="text" name="file_path" id="file_path" required class="frm_input required">
@@ -151,8 +151,8 @@ if($is_admin != 'super')
             </form>
 
             <p>
-                경로는 그누보드5 설치 루트를 기준으로 그누보드4의 config.php 파일의 상대경로입니다.<br>
-                예를 들어 그누보드4를 웹루트에 설치하셨고 그누보드5를 g5라는 하위 폴더에 설치하셨다면 입력하실 경로는 ../config.php 입니다.
+                경로는 영카트5 설치 루트를 기준으로 영카트4의 config.php 파일의 상대경로입니다.<br>
+                예를 들어 영카트4를 웹루트에 설치하셨고 영카트5를 yc5라는 하위 폴더에 설치하셨다면 입력하실 경로는 ../config.php 입니다.
             </p>
 
         </div>
@@ -160,7 +160,7 @@ if($is_admin != 'super')
         <script>
         function fimport_submit(f)
         {
-            return confirm('그누보드4의 DB 데이터를 이전하시겠습니까?');
+            return confirm('영카트4의 DB 데이터를 이전하시겠습니까?');
         }
         </script>
 

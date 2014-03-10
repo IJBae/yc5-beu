@@ -1,5 +1,8 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
+
+// add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
+add_stylesheet('<link rel="stylesheet" href="'.G5_SHOP_SKIN_URL.'/style.css">', 0);
 ?>
 
 <!-- 쇼핑몰 이벤트 시작 { -->
@@ -32,7 +35,7 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
     }
 
     if ($i==0)
-        echo '<li id="sev_empty">이벤트 없음</li>'.PHP_EOL;
+        echo '<li id="sev_empty">이벤트 준비 중</li>'.PHP_EOL;
     ?>
     </ul>
 

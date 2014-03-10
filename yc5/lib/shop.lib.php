@@ -1110,13 +1110,24 @@ function date_conv($date, $case=1)
 
 
 // 배너출력
-function display_banner($position, $num="")
+function display_banner($position, $skin='')
 {
     global $g5;
 
     if (!$position) $position = '왼쪽';
+    if (!$skin) $skin = 'boxbanner.skin.php';
 
-    include G5_SHOP_SKIN_PATH.'/boxbanner'.$num.'.skin.php';
+    $skin_path = G5_SHOP_SKIN_PATH.'/'.$skin;
+
+    if(file_exists($skin_path)) {
+        // 배너 출력
+        $sql = " select * from {$g5['g5_shop_banner_table']} where '".G5_TIME_YMDHIS."' between bn_begin_time and bn_end_time and bn_position = '$position' order by bn_order, bn_id desc ";
+        $result = sql_query($sql);
+
+        include $skin_path;
+    } else {
+        echo '<p>'.str_replace(G5_PATH.'/', '', $skin_path).'파일이 존재하지 않습니다.</p>';
+    }
 }
 
 
@@ -1384,16 +1395,16 @@ function item_icon($it)
     $icon = '<span class="sit_icon">';
     // 품절
     if (is_soldout($it['it_id']))
-        $icon .= '<img src="'.G5_SHOP_URL.'/img/icon_soldout.gif" alt="품절"> ';
+        $icon .= '<img src="'.G5_SHOP_URL.'/img/icon_soldout.gif" alt="품절">';
 
     if ($it['it_type1'])
-        $icon .= '<img src="'.G5_SHOP_URL.'/img/icon_hit.gif" alt="최신상품">';
+        $icon .= '<img src="'.G5_SHOP_URL.'/img/icon_hit.gif" alt="히트상품">';
 
     if ($it['it_type2'])
-        $icon .= '<img src="'.G5_SHOP_URL.'/img/icon_rec.gif" alt="히트상품">';
+        $icon .= '<img src="'.G5_SHOP_URL.'/img/icon_rec.gif" alt="추천상품">';
 
     if ($it['it_type3'])
-        $icon .= '<img src="'.G5_SHOP_URL.'/img/icon_new.gif" alt="추천상품">';
+        $icon .= '<img src="'.G5_SHOP_URL.'/img/icon_new.gif" alt="최신상품">';
 
     if ($it['it_type4'])
         $icon .= '<img src="'.G5_SHOP_URL.'/img/icon_best.gif" alt="인기상품">';
@@ -1862,7 +1873,7 @@ function is_soldout($it_id)
 }
 
 // 상품후기 작성가능한지 체크
-function check_itemuse_write($close=true)
+function check_itemuse_write($it_id, $mb_id, $close=true)
 {
     global $g5, $default, $is_admin;
 
@@ -1871,7 +1882,7 @@ function check_itemuse_write($close=true)
         $sql = " select count(*) as cnt
                     from {$g5['g5_shop_cart_table']}
                     where it_id = '$it_id'
-                      and mb_id = '{$member['mb_id']}'
+                      and mb_id = '$mb_id'
                       and ct_status = '완료' ";
         $row = sql_fetch($sql);
 

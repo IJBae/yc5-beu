@@ -290,6 +290,7 @@ $sql_common = " ca_id               = '$ca_id',
                 it_notax            = '$it_notax',
                 it_sell_email       = '$it_sell_email',
                 it_use              = '$it_use',
+                it_nocoupon         = '$it_nocoupon',
                 it_soldout          = '$it_soldout',
                 it_stock_qty        = '$it_stock_qty',
                 it_stock_sms        = '$it_stock_sms',
@@ -454,6 +455,7 @@ if($supply_count) {
 
 // 동일 분류내 상품 동일 옵션 적용
 $ca_fields = '';
+if(is_checked('chk_ca_it_basic'))               $ca_fields .= " , it_basic = '$it_basic' ";
 if(is_checked('chk_ca_it_order'))               $ca_fields .= " , it_order = '$it_order' ";
 if(is_checked('chk_ca_it_type'))                $ca_fields .= " , it_type1 = '$it_type1', it_type2 = '$it_type2', it_type3 = '$it_type3', it_type4 = '$it_type4', it_type5 = '$it_type5' ";
 if(is_checked('chk_ca_it_maker'))               $ca_fields .= " , it_maker = '$it_maker' ";
@@ -464,6 +466,7 @@ if(is_checked('chk_ca_it_notax'))               $ca_fields .= " , it_notax = '$i
 if(is_checked('chk_ca_it_sell_email'))          $ca_fields .= " , it_sell_email = '$it_sell_email' ";
 if(is_checked('chk_ca_it_tel_inq'))             $ca_fields .= " , it_tel_inq = '$it_tel_inq' ";
 if(is_checked('chk_ca_it_use'))                 $ca_fields .= " , it_use = '$it_use' ";
+if(is_checked('chk_ca_it_nocoupon'))            $ca_fields .= " , it_nocoupon = '$it_nocoupon' ";
 if(is_checked('chk_ca_it_soldout'))             $ca_fields .= " , it_soldout = '$it_soldout' ";
 if(is_checked('chk_ca_it_info'))                $ca_fields .= " , it_info_gubun = '$it_info_gubun', it_info_value = '$it_info_value' ";
 if(is_checked('chk_ca_it_price'))               $ca_fields .= " , it_price = '$it_price' ";
@@ -500,6 +503,7 @@ if($ca_fields) {
 
 // 모든 상품 동일 옵션 적용
 $all_fields = '';
+if(is_checked('chk_all_it_basic'))               $all_fields .= " , it_basic = '$it_basic' ";
 if(is_checked('chk_all_it_order'))               $all_fields .= " , it_order = '$it_order' ";
 if(is_checked('chk_all_it_type'))                $all_fields .= " , it_type1 = '$it_type1', it_type2 = '$it_type2', it_type3 = '$it_type3', it_type4 = '$it_type4', it_type5 = '$it_type5' ";
 if(is_checked('chk_all_it_maker'))               $all_fields .= " , it_maker = '$it_maker' ";
@@ -510,6 +514,7 @@ if(is_checked('chk_all_it_notax'))               $all_fields .= " , it_notax = '
 if(is_checked('chk_all_it_sell_email'))          $all_fields .= " , it_sell_email = '$it_sell_email' ";
 if(is_checked('chk_all_it_tel_inq'))             $all_fields .= " , it_tel_inq = '$it_tel_inq' ";
 if(is_checked('chk_all_it_use'))                 $all_fields .= " , it_use = '$it_use' ";
+if(is_checked('chk_all_it_nocoupon'))            $all_fields .= " , it_nocoupon = '$it_nocoupon' ";
 if(is_checked('chk_all_it_soldout'))             $all_fields .= " , it_soldout = '$it_soldout' ";
 if(is_checked('chk_all_it_info'))                $all_fields .= " , it_info_gubun = '$it_info_gubun', it_info_value = '$it_info_value' ";
 if(is_checked('chk_all_it_price'))               $all_fields .= " , it_price = '$it_price' ";
@@ -554,7 +559,7 @@ echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">";
 <script>
     if (confirm("계속 입력하시겠습니까?"))
         //location.href = "<?php echo "./itemform.php?it_id=$it_id&amp;sort1=$sort1&amp;sort2=$sort2&amp;sel_ca_id=$sel_ca_id&amp;sel_field=$sel_field&amp;search=$search&amp;page=$page"?>";
-        location.href = "<?php echo "./itemform.php?$qstr"; ?>";
+        location.href = "<?php echo "./itemform.php?".str_replace('&amp;', '&', $qstr); ?>";
     else
-        location.href = "<?php echo "./itemlist.php?$qstr"; ?>";
+        location.href = "<?php echo "./itemlist.php?".str_replace('&amp;', '&', $qstr); ?>";
 </script>

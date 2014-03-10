@@ -5,6 +5,9 @@ $tv_div['top'] = 0;
 $tv_div['img_width'] = 70;
 $tv_div['img_height'] = 70;
 $tv_div['img_length'] = 3; // 한번에 보여줄 이미지 수
+
+// add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
+add_stylesheet('<link rel="stylesheet" href="'.G5_SHOP_SKIN_URL.'/style.css">', 0);
 ?>
 
 <!-- 오늘 본 상품 시작 { -->
@@ -27,7 +30,7 @@ $tv_div['img_length'] = 3; // 한번에 보여줄 이미지 수
             $j = $i - 1;
             if ($j%$tv_div['img_length']==0) $k++;
             $it_name = get_text($rowx['it_name']);
-            $img = get_it_image($tv_it_id, $tv_div['img_width'], $tv_div['img_height'], $tv_it_id);
+            $img = get_it_image($tv_it_id, $tv_div['img_width'], $tv_div['img_height'], $tv_it_id, '', $it_name);
             if ($i==1) echo '<ul id="stv_ul">'.PHP_EOL;
             echo '<li class="stv_item c'.$k.'">'.PHP_EOL;
             echo $img;

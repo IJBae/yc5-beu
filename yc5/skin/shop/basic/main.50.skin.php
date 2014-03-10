@@ -40,7 +40,7 @@ for ($i=1; $row=sql_fetch_array($result); $i++) {
     echo "<li class=\"sct_li{$sct_last}\" style=\"width:{$this->img_width}px\">";
 
     if ($this->href) {
-        echo "<a href=\"{$this->href}{$row['it_id']}\" class=\"sct_a sct_img\">\n";
+        echo "<div class=\"sct_img\"><a href=\"{$this->href}{$row['it_id']}\" class=\"sct_a\">\n";
     }
 
     if ($this->view_it_img) {
@@ -48,7 +48,7 @@ for ($i=1; $row=sql_fetch_array($result); $i++) {
     }
 
     if ($this->href) {
-        echo "</a>\n";
+        echo "</a></div>\n";
     }
 
     if ($this->view_it_icon) {
@@ -56,11 +56,11 @@ for ($i=1; $row=sql_fetch_array($result); $i++) {
     }
 
     if ($this->view_it_id) {
-        echo "<span class=\"sct_id\">&lt;".stripslashes($row['it_id'])."&gt;</span>\n";
+        echo "<div class=\"sct_id\">&lt;".stripslashes($row['it_id'])."&gt;</div>\n";
     }
 
     if ($this->href) {
-        echo "<a href=\"{$this->href}{$row['it_id']}\" class=\"sct_a sct_txt\">\n";
+        echo "<div class=\"sct_txt\"><a href=\"{$this->href}{$row['it_id']}\" class=\"sct_a\">\n";
     }
 
     if ($this->view_it_name) {
@@ -68,7 +68,7 @@ for ($i=1; $row=sql_fetch_array($result); $i++) {
     }
 
     if ($this->href) {
-        echo "</a>\n";
+        echo "</a></div>\n";
     }
 
     if ($this->view_it_basic && $row['it_basic']) {
@@ -209,6 +209,10 @@ if($i == 1) echo "<p class=\"sct_noitem\">등록된 상품이 없습니다.</p>\
             function set_interval() {
                 if(count > 1) {
                     clear_interval();
+
+                    if($("#btn_"+el_id).find("button.sctrl_stop").data("stop") == true)
+                        return;
+
                     intervals[el_id] = setInterval(item_drop, settings.interval);
 
                     // control 버튼 class
@@ -250,6 +254,8 @@ $(function() {
 
     // 애니메이션 play
     $("#btn_smt_<?php echo $this->type; ?> button.sctrl_play").on("click", function() {
+        $("#btn_smt_<?php echo $this->type; ?> button.sctrl_stop").data("stop", false);
+
         var id = $(this).closest(".sctrl").attr("id").replace("btn_", "");
         $("#"+id).itemDrop();
         //$("#"+id).itemDrop({ interval: 3000, duration: 800, delay: 300 });
@@ -262,6 +268,8 @@ $(function() {
             $(this).children().addClass("sctrl_on").html("<b class=\"sound_only\">선택됨</b>");
             var id = $(this).closest(".sctrl").attr("id").replace("btn_", "");
             $("#"+id).itemDrop("stop");
+
+            $(this).data("stop", true);
         }
     });
 });
