@@ -114,6 +114,7 @@ define('G5_PHPMAILER_PATH', G5_PLUGIN_PATH.'/'.G5_PHPMAILER_DIR);
 
 define('G5_USE_MOBILE', true); // 모바일 홈페이지를 사용하지 않을 경우 false 로 설정
 define('G5_USE_CACHE',  true); // 최신글등에 cache 기능 사용 여부
+define('G5_SYNDI_USE',  true); // Syndication 기능 사용 여부
 
 
 /********************
@@ -152,6 +153,10 @@ define('G5_SMTP', '127.0.0.1');
 /********************
     기타 상수
 ********************/
+
+// SQL 에러를 표시할 것인지 지정
+// 에러를 표시하지 않으려면 FALSE 로 변경
+define('G5_DISPLAY_SQL_ERROR', TRUE);
 
 // escape string 처리 함수 지정
 // POST 등에서 한글이 깨질 경우 addslashes 로 변경

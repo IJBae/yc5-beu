@@ -25,6 +25,18 @@ function array_map_deep($fn, $array)
     return $array;
 }
 
+// SQL Injection 대응 문자열 필터링
+function sql_escape_string($str)
+{
+    $pattern = '/(and|or).*(union|select|insert|update|delete|from|where|limit|create|drop).*/i';
+    $replace = '';
+
+    $str = preg_replace($pattern, $replace, $str);
+    $str = call_user_func(G5_ESCAPE_FUNCTION, $str);
+
+    return $str;
+}
+
 // 마이크로 타임을 얻어 계산 형식으로 만듦
 function get_microtime()
 {
@@ -33,7 +45,7 @@ function get_microtime()
 }
 
 
-// 현재페이지, 총페이지수, 한페이지에 보여줄 행, URL
+// 한페이지에 보여줄 행, 현재페이지, 총페이지수, URL
 function get_paging($write_pages, $cur_page, $total_page, $url, $add="")
 {
     $url = preg_replace('#&amp;page=[0-9]*(&amp;page=)$#', '$1', $url);
@@ -1193,7 +1205,7 @@ function get_sideview($mb_id, $name='', $email='', $homepage='')
 {
     global $config;
     global $g5;
-    global $bo_table, $sca, $is_admin;
+    global $bo_table, $sca, $is_admin, $member;
 
     $email = base64_encode($email);
     $homepage = set_http($homepage);
@@ -1261,6 +1273,10 @@ function get_sideview($mb_id, $name='', $email='', $homepage='')
     }
     if($mb_id)
         $str2 .= "<a href=\"".G5_BBS_URL."/new.php?mb_id=".$mb_id."\">전체게시물</a>\n";
+    if($g5['sms5_use_sideview']){
+        $mb = get_member($mb_id, " mb_open, mb_sms , mb_hp ");
+        if( $mb['mb_open'] && $mb['mb_sms'] && $mb['mb_hp'] ) $str2 .= "<a href=\"".G5_SMS5_URL."/?mb_id=".$mb_id."\" class=\"win_sms5\" target=\"_blank\">문자보내기</a>\n";
+    }
     if($is_admin == "super" && $mb_id) {
         $str2 .= "<a href=\"".G5_ADMIN_URL."/member_form.php?w=u&amp;mb_id=".$mb_id."\" target=\"_blank\">회원정보변경</a>\n";
         $str2 .= "<a href=\"".G5_ADMIN_URL."/point_list.php?sfl=mb_id&amp;stx=".$mb_id."\" target=\"_blank\">포인트내역</a>\n";
@@ -1433,10 +1449,16 @@ function sql_select_db($db, $connect)
 
 
 // mysql_query 와 mysql_error 를 한꺼번에 처리
-function sql_query($sql, $error=TRUE)
+function sql_query($sql, $error=G5_DISPLAY_SQL_ERROR)
 {
+    // Blind SQL Injection 취약점 해결
+    $sql = trim($sql);
+    // union의 사용을 허락하지 않습니다.
+    $sql = preg_replace("#^select.*from.*union.*#i", "select 1", $sql);
+    // `information_schema` DB로의 접근을 허락하지 않습니다.
+    $sql = preg_replace("#^select.*from.*where.*`?information_schema`?.*#i", "select 1", $sql);
     if ($error)
-        $result = @mysql_query($sql) or die("<p>$sql<p>" . mysql_errno() . " : " .  mysql_error() . "<p>error file : {$_SERVER['PHP_SELF']}");
+        $result = @mysql_query($sql) or die("<p>$sql<p>" . mysql_errno() . " : " .  mysql_error() . "<p>error file : $_SERVER[PHP_SELF]");
     else
         $result = @mysql_query($sql);
     return $result;
@@ -1444,7 +1466,7 @@ function sql_query($sql, $error=TRUE)
 
 
 // 쿼리를 실행한 후 결과값에서 한행을 얻는다.
-function sql_fetch($sql, $error=TRUE)
+function sql_fetch($sql, $error=G5_DISPLAY_SQL_ERROR)
 {
     $result = sql_query($sql, $error);
     //$row = @sql_fetch_array($result) or die("<p>$sql<p>" . mysql_errno() . " : " .  mysql_error() . "<p>error file : $_SERVER['PHP_SELF']");
@@ -2511,14 +2533,15 @@ function module_exec_check($exe, $type)
             // 바이너리 파일인지
             if($is_linux) {
                 $search = false;
+                $isbinary = true;
                 $executable = true;
 
                 switch($type) {
                     case 'ct_cli':
-                        exec($exe.' -h 2>&1', $out);
+                        exec($exe.' -h 2>&1', $out, $return_var);
 
-                        if(empty($out)) {
-                            $executable = false;
+                        if($return_var == 139) {
+                            $isbinary = false;
                             break;
                         }
 
@@ -2530,10 +2553,10 @@ function module_exec_check($exe, $type)
                         }
                         break;
                     case 'pp_cli':
-                        exec($exe.' -h 2>&1', $out);
+                        exec($exe.' -h 2>&1', $out, $return_var);
 
-                        if(empty($out)) {
-                            $executable = false;
+                        if($return_var == 139) {
+                            $isbinary = false;
                             break;
                         }
 
@@ -2545,10 +2568,10 @@ function module_exec_check($exe, $type)
                         }
                         break;
                     case 'okname':
-                        exec($exe.' D 2>&1', $out);
+                        exec($exe.' D 2>&1', $out, $return_var);
 
-                        if(empty($out)) {
-                            $executable = false;
+                        if($return_var == 139) {
+                            $isbinary = false;
                             break;
                         }
 
@@ -2561,9 +2584,7 @@ function module_exec_check($exe, $type)
                         break;
                 }
 
-                if(!$executable) {
-                    $error = 'exec 함수의 실행권한이 없습니다. 서버관리자에게 문의해 주십시오.';
-                } else if(!$search) {
+                if(!$isbinary || !$search) {
                     $error = $exe.'\n파일을 바이너리 타입으로 다시 업로드하여 주십시오.';
                 }
             }
@@ -2618,5 +2639,25 @@ function htmlspecialchars2($str)
     $trans = array("\"" => "&#034;", "'" => "&#039;", "<"=>"&#060;", ">"=>"&#062;");
     $str = strtr($str, $trans);
     return $str;
+}
+
+// date 형식 변환
+function conv_date_format($format, $date, $add='')
+{
+    if($add)
+        $timestamp = strtotime($add, strtotime($date));
+    else
+        $timestamp = strtotime($date);
+
+    return date($format, $timestamp);
+}
+
+// unescape nl 얻기
+function conv_unescape_nl($str)
+{
+    $search = array('\\r', '\r', '\\n', '\n');
+    $replace = array('', '', "\n", "\n");
+
+    return str_replace($search, $replace, $str);
 }
 ?>

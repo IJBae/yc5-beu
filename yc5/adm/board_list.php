@@ -51,7 +51,7 @@ $listall = '<a href="'.$_SERVER['PHP_SELF'].'" class="ov_listall">전체목록</
 $g5['title'] = '게시판관리';
 include_once('./admin.head.php');
 
-$colspan = 16;
+$colspan = 15;
 ?>
 
 <div class="local_ov01 local_ov">
@@ -107,7 +107,6 @@ $colspan = 16;
         <th scope="col">다운P<span class="sound_only">포인트</span></th>
         <th scope="col"><?php echo subject_sort_link('bo_use_sns') ?>SNS<br>사용</a></th>
         <th scope="col"><?php echo subject_sort_link('bo_use_search') ?>검색<br>사용</a></th>
-        <th scope="col"><?php echo subject_sort_link('bo_show_menu') ?>메뉴<br>보임</a></th>
         <th scope="col"><?php echo subject_sort_link('bo_order') ?>출력<br>순서</a></th>
         <th scope="col">접속기기</th>
         <th scope="col">관리</th>
@@ -148,22 +147,22 @@ $colspan = 16;
         </td>
         <td>
             <label for="bo_subject_<?php echo $i; ?>" class="sound_only">게시판 제목</label>
-            <input type="text" name="bo_subject[<?php echo $i ?>]" value="<?php echo get_text($row['bo_subject']) ?>" id="bo_subject_<?php echo $i ?>" required class="required frm_input bo_subject" size="10">
+            <input type="text" name="bo_subject[<?php echo $i ?>]" value="<?php echo get_text($row['bo_subject']) ?>" id="bo_subject_<?php echo $i ?>" required class="required frm_input bo_subject full_input" size="10">
         </td>
-        <td>
-            <label for="" class="sound_only">읽기 포인트</label>
+        <td class="td_numsmall">
+            <label for="bo_read_point_<?php echo $i; ?>" class="sound_only">읽기 포인트</label>
             <input type="text" name="bo_read_point[<?php echo $i ?>]" value="<?php echo $row['bo_read_point'] ?>" id="bo_read_point_<?php echo $i; ?>" class="frm_input" size="2">
         </td>
-        <td>
-            <label for="" class="sound_only">쓰기 포인트</label>
+        <td class="td_numsmall">
+            <label for="bo_write_point_<?php echo $i; ?>" class="sound_only">쓰기 포인트</label>
             <input type="text" name="bo_write_point[<?php echo $i ?>]" value="<?php echo $row['bo_write_point'] ?>" id="bo_write_point_<?php echo $i; ?>" class="frm_input" size="2">
         </td>
-        <td>
-            <label for="" class="sound_only">댓글 포인트</label>
+        <td class="td_numsmall">
+            <label for="bo_comment_point_<?php echo $i; ?>" class="sound_only">댓글 포인트</label>
             <input type="text" name="bo_comment_point[<?php echo $i ?>]" value="<?php echo $row['bo_comment_point'] ?>" id="bo_comment_point_<?php echo $i; ?>" class="frm_input" size="2">
         </td>
-        <td>
-            <label for="" class="sound_only">다운 포인트</label>
+        <td class="td_numsmall">
+            <label for="bo_download_point_<?php echo $i; ?>" class="sound_only">다운 포인트</label>
             <input type="text" name="bo_download_point[<?php echo $i ?>]" value="<?php echo $row['bo_download_point'] ?>" id="bo_download_point_<?php echo $i; ?>" class="frm_input" size="2">
         </td>
         <td class="td_chk">
@@ -173,10 +172,6 @@ $colspan = 16;
         <td class="td_chk">
             <label for="bo_use_search_<?php echo $i; ?>" class="sound_only">검색 사용</label>
             <input type="checkbox" name="bo_use_search[<?php echo $i ?>]" value="1" id="bo_use_search_<?php echo $i ?>" <?php echo $row['bo_use_search']?"checked":"" ?>>
-        </td>
-        <td class="td_chk">
-            <label for="bo_show_menu_<?php echo $i; ?>" class="sound_only">메인메뉴 보이기</label>
-            <input type="checkbox" name="bo_show_menu[<?php echo $i ?>]" value="1" id="bo_show_menu_<?php echo $i ?>" <?php echo $row['bo_show_menu']?"checked":"" ?>>
         </td>
         <td class="td_chk">
             <label for="bo_order_<?php echo $i; ?>" class="sound_only">출력 순서</label>

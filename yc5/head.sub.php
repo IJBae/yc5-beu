@@ -1,5 +1,5 @@
 <?php
-// 5.0b25.1
+// 5.0b27
 
 // 이 파일은 새로운 파일 생성시 반드시 포함되어야 함
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
@@ -50,7 +50,7 @@ if($config['cf_add_meta'])
 <title><?php echo $g5_head_title; ?></title>
 <?php
 if (defined('G5_IS_ADMIN')) {
-    echo '<link rel="stylesheet" href="'.G5_CSS_URL.'/admin.css">'.PHP_EOL;
+    echo '<link rel="stylesheet" href="'.G5_ADMIN_URL.'/css/admin.css">'.PHP_EOL;
 } else {
     $shop_css = '';
     if (defined('_SHOP_')) $shop_css = '_shop';

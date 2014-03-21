@@ -22,7 +22,9 @@ $admin_id    = $_POST['admin_id'];
 $admin_pass  = $_POST['admin_pass'];
 $admin_name  = $_POST['admin_name'];
 $admin_email = $_POST['admin_email'];
-$g5_install  = $_POST['g5_install'];
+$g5_install = 0;
+if (isset($_POST['g5_install']))
+    $g5_install  = $_POST['g5_install'];
 $g5_shop_prefix = $_POST['g5_shop_prefix'];
 $g5_shop_install= $_POST['g5_shop_install'];
 
@@ -144,6 +146,7 @@ if($g5_install || !$result) {
                     cf_mobile_search_skin = 'basic',
                     cf_mobile_connect_skin = 'basic',
                     cf_mobile_member_skin = 'basic',
+                    cf_editor = 'ckeditor4',
                     cf_captcha_mp3 = 'basic',
                     cf_register_level = '2',
                     cf_register_point = '1000',
@@ -166,6 +169,7 @@ if($g5_install || !$result) {
                     cf_flash_extension = 'swf',
                     cf_movie_extension = 'asx|asf|wmv|wma|mpg|mpeg|mov|avi|mp3',
                     cf_formmail_is_member = '1',
+                    cf_page_rows = '15',
                     cf_page_rows = '15',
                     cf_cert_limit = '2',
                     cf_stipulation = '해당 홈페이지에 맞는 회원가입약관을 입력합니다.',
@@ -510,6 +514,7 @@ fwrite($f, "\$g5['content_table'] = G5_TABLE_PREFIX.'content'; // 내용(컨텐�
 fwrite($f, "\$g5['faq_table'] = G5_TABLE_PREFIX.'faq'; // 자주하시는 질문 테이블\n");
 fwrite($f, "\$g5['faq_master_table'] = G5_TABLE_PREFIX.'faq_master'; // 자주하시는 질문 마스터 테이블\n");
 fwrite($f, "\$g5['new_win_table'] = G5_TABLE_PREFIX.'new_win'; // 새창 테이블\n");
+fwrite($f, "\$g5['menu_table'] = G5_TABLE_PREFIX.'menu'; // 메뉴관리 테이블\n");
 
 if($g5_shop_install) {
     fwrite($f, "\n");
