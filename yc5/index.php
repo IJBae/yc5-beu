@@ -10,12 +10,6 @@ if ($config['cf_include_index']) {
     return; // 이 코드의 아래는 실행을 하지 않습니다.
 }
 
-// 루트 index를 쇼핑몰 index 설정했을 때
-if(isset($default['de_root_index_use']) && $default['de_root_index_use']) {
-    require_once(G5_SHOP_PATH.'/index.php');
-    return;
-}
-
 if (G5_IS_MOBILE) {
     include_once(G5_MOBILE_PATH.'/index.php');
     return;
@@ -28,7 +22,12 @@ include_once('./_head.php');
 <!-- 최신글 시작 { -->
 <?php
 //  최신글
-$sql = " select bo_table from `{$g5['board_table']}` a left join `{$g5['group_table']}` b on (a.gr_id=b.gr_id)  where a.bo_device <> 'mobile' order by b.gr_order, a.bo_order ";
+$sql = " select bo_table
+            from `{$g5['board_table']}` a left join `{$g5['group_table']}` b on (a.gr_id=b.gr_id)
+            where a.bo_device <> 'mobile' ";
+if(!$is_admin)
+    $sql .= " and a.bo_use_cert = '' ";
+$sql .= " order by b.gr_order, a.bo_order ";
 $result = sql_query($sql);
 for ($i=0; $row=sql_fetch_array($result); $i++) {
     if ($i%2==1) $lt_style = "margin-left:20px";

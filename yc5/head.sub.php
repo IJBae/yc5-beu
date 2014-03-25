@@ -1,5 +1,5 @@
 <?php
-// 5.0b27
+// 5.0b28
 
 // 이 파일은 새로운 파일 생성시 반드시 포함되어야 함
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
@@ -36,7 +36,7 @@ header("Pragma: no-cache"); // HTTP/1.0
 <meta charset="utf-8">
 <?php
 if (G5_IS_MOBILE) {
-    echo '<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10">'.PHP_EOL;
+    echo '<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=yes">'.PHP_EOL;
     echo '<meta name="HandheldFriendly" content="true">'.PHP_EOL;
     echo '<meta name="format-detection" content="telephone=no">'.PHP_EOL;
 } else {
@@ -52,9 +52,7 @@ if($config['cf_add_meta'])
 if (defined('G5_IS_ADMIN')) {
     echo '<link rel="stylesheet" href="'.G5_ADMIN_URL.'/css/admin.css">'.PHP_EOL;
 } else {
-    $shop_css = '';
-    if (defined('_SHOP_')) $shop_css = '_shop';
-    echo '<link rel="stylesheet" href="'.G5_CSS_URL.'/'.(G5_IS_MOBILE?'mobile':'default').$shop_css.'.css">'.PHP_EOL;
+    echo '<link rel="stylesheet" href="'.G5_CSS_URL.'/'.(G5_IS_MOBILE?'mobile':'default').'.css">'.PHP_EOL;
     // canonical 지정
     $canonical = '';
     if ($bo_table && $wr_id) $canonical = 'http://'.$_SERVER['HTTP_HOST'].'/bbs/board.php?bo_table='.$bo_table.'&wr_id='.$wr_id;
@@ -83,11 +81,7 @@ if ($is_admin) {
 ?>
 </script>
 <script src="<?php echo G5_JS_URL ?>/jquery-1.8.3.min.js"></script>
-<?php if (defined('_SHOP_')) { ?>
-<script src="<?php echo G5_JS_URL ?>/jquery.shop.menu.js"></script>
-<?php } else { ?>
 <script src="<?php echo G5_JS_URL ?>/jquery.menu.js"></script>
-<?php } ?>
 <script src="<?php echo G5_JS_URL ?>/common.js"></script>
 <script src="<?php echo G5_JS_URL ?>/wrest.js"></script>
 <?php
