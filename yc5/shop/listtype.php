@@ -36,6 +36,8 @@ else
 if (!$skin)
     $skin = 'list.10.skin.php';
 
+define('G5_SHOP_CSS_URL', G5_SHOP_SKIN_URL);
+
 // 리스트 유형별로 출력
 $list_file = G5_SHOP_SKIN_PATH.'/'.$skin;
 if (file_exists($list_file)) {
@@ -48,7 +50,7 @@ if (file_exists($list_file)) {
 
     $list = new item_list();
     $list->set_type($type);
-    $list->set_list_skin($skin);
+    $list->set_list_skin($list_file);
     $list->set_list_mod($list_mod);
     $list->set_list_row($list_row);
     $list->set_img_size($img_width, $img_height);

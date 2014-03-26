@@ -10,6 +10,12 @@ if ($config['cf_include_index']) {
     return; // 이 코드의 아래는 실행을 하지 않습니다.
 }
 
+// 루트 index를 쇼핑몰 index 설정했을 때
+if(isset($default['de_root_index_use']) && $default['de_root_index_use']) {
+    require_once(G5_SHOP_PATH.'/index.php');
+    return;
+}
+
 if (G5_IS_MOBILE) {
     include_once(G5_MOBILE_PATH.'/index.php');
     return;
